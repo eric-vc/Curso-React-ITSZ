@@ -1,4 +1,5 @@
 import { useState } from "react";
+import FiltrosProducto from "./FiltrosProducto";
 import ProductCard from "./ProductCard";
 import laptopImage from "../images/laptop-pro.jpg";
 import mouseImage from "../images/mouse.jpg";
@@ -10,7 +11,7 @@ import mochilaImage from "../images/mochila-laptop.jpg";
 import cableHdmiImage from "../images/cable-hdmi.jpg";
 import soporteMonitorImage from "../images/soporte-monitor.jpg";
 import lamparaLedImage from "../images/lampara-usb.jpg";
-const productos = [
+const productosData = [
   {
     id: 1,
     nombre: "Laptop Pro",
@@ -93,73 +94,133 @@ const productos = [
   }
 ];
 function Catalogo() {
-  const [busqueda, setBusqueda] = useState("");
-  // Filtrar productos por búsqueda
-  const productosFiltrados = productos.filter((producto) =>
-    
+const [busqueda, setBusqueda] = useState("");
+const [soloDisponibles, setSoloDisponibles] = useState(false);
+const [precioMin, setPrecioMin] = useState(0);
+const [precioMax, setPrecioMax] = useState(2000);
+const [ordenamiento, setOrdenamiento] = useState("nombre");
+ // Aplicar todos los filtros
+let productosFiltrados = productosData
+.filter((producto) =>
 producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
+)
+.filter((producto) => !soloDisponibles || 
+producto.disponible)
+.filter((producto) => producto.precio >= precioMin && 
+producto.precio <= precioMax);
+// Aplicar ordenamiento
+productosFiltrados.sort((a, b) => {
+    switch (ordenamiento) {
+      case "nombre":
+        return a.nombre.localeCompare(b.nombre);
+      case "nombre-desc":
+        return b.nombre.localeCompare(a.nombre);
+      case "precio-asc":
+        return a.precio - b.precio;
+      case "precio-desc":
+        return b.precio - a.precio;
+      case "disponibilidad":
+        return b.disponible - a.disponible;
+      default:
+        return 0;
+    }
+  });
   // Calcular estadísticas
-  const totalProductos = productos.length;
-  const productosDisponibles = productos.filter(
-    (p) => p.disponible
-  ).length;
-  const precioPromedio =
-    productos.reduce((suma, p) => suma + p.precio, 0) / 
-totalProductos;
+  const totalProductos = productosData.length;
+  const productosDisponibles = productosData.filter(p => 
+p.disponible).length;
+  const precioPromedio = productosData.reduce((suma, p) => suma + 
+p.precio, 0) / totalProductos;
   return (
-    <section className="catalogo">
-      <h1>Catálogo de Productos</h1>
-      {/* Barra de búsqueda */}
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Buscar productos..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          className="search-input"
-        />
-      </div>
-      {/* Estadísticas */}
-      <div className="statistics">
-        <div className="stat">
-          <h4>Total Productos</h4>
-          <p>{totalProductos}</p>
+    <div className="catalogo-container">
+      <section className="catalogo">
+        <h1>Catálogo de Productos</h1>
+        {/* Barra de búsqueda */}
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Buscar productos..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            className="search-input"
+          />
         </div>
-        <div className="stat">
-          <h4>Disponibles</h4>
-          <p>{productosDisponibles}</p>
+        {/* Estadísticas */}
+        <div className="statistics">
+          <div className="stat">
+            <h4>Total Productos</h4>
+            <p>{totalProductos}</p>
+          </div>
+          <div className="stat">
+            <h4>Disponibles</h4>
+            <p className={productosDisponibles === 0 ? "warning" 
+: ""}>
+              {productosDisponibles}
+            </p>
+          </div>
+          <div className="stat">
+            <h4>Precio Promedio</h4>
+            <p>${precioPromedio.toFixed(2)}</p>
+          </div>
+          <div className="stat">
+            <h4>Resultados</h4>
+            <p>{productosFiltrados.length}</p>
+          </div>
         </div>
-        <div className="stat">
-          <h4>Precio Promedio</h4>
-          <p>${precioPromedio.toFixed(2)}</p>
-        </div>
-        <div className="stat">
-          <h4>Resultados Búsqueda</h4>
-          <p>{productosFiltrados.length}</p>
-        </div>
-      </div>
-      {/* Grid de productos */}
-      <div className="productos-grid">
-        {productosFiltrados.length > 0 ? (
-          productosFiltrados.map((producto) => (
-            <ProductCard
-              key={producto.id}
-              nombre={producto.nombre}
-              precio={producto.precio}
-              descripcion={producto.descripcion}
-              imagen={producto.imagen}
-              disponible={producto.disponible}
-            />
-          ))
-        ) : (
-          <p className="no-results">
-            No se encontraron productos que coincidan con "
+      </section>
+      <div className="catalogo-content">
+        {/* Panel de filtros */}
+        <aside className="filtros-panel">
+          <FiltrosProducto
+            soloDisponibles={soloDisponibles}
+            setSoloDisponibles={setSoloDisponibles}
+            precioMin={precioMin}
+            setPrecioMin={setPrecioMin}
+            precioMax={precioMax}
+            setPrecioMax={setPrecioMax}
+            ordenamiento={ordenamiento}
+            setOrdenamiento={setOrdenamiento}
+          />
+        </aside>
+        {/* Grid de productos */}
+        <main className="productos-section">
+          {productosFiltrados.length > 0 ? (
+            <div className="productos-grid">
+              {productosFiltrados.map((producto) => (
+                <ProductCard
+                  key={producto.id}
+                  nombre={producto.nombre}
+                  precio={producto.precio}
+                  descripcion={producto.descripcion}
+                  imagen={producto.imagen}
+                  disponible={producto.disponible}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="no-results-container">
+              {busqueda.length > 0 ? (
+                <>
+                  <h2>No se encontraron resultados</h2>
+                  <p>
+                    No hay productos que coincidan con "
 {busqueda}"
-</p>
-)}
+                    {soloDisponibles && " disponibles"}
+                    {precioMin > 0 || precioMax < 2000 && ` en el 
+rango $${precioMin}-$${precioMax}`}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2>No hay productos disponibles</h2>
+                  <p>Intenta ajustar los filtros</p>
+                </>
+              )}
+            </div>
+          )}
+</main>
 </div>
-</section>
+</div>
 );
 }
 export default Catalogo;
