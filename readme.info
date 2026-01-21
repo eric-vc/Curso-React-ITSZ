@@ -1,0 +1,36 @@
+EJERCICIO 1: Componentes Funcionales y Props
+
+Objetivo: Crear componentes reutilizables que reciban y muestren datos
+mediante props.
+
+Tiempo: 45 minutos
+
+Enunciado
+Crea una aplicación React que muestre un catálogo básico de 3 productos.
+Cada producto debe tener:
+Nombre
+Precio
+Descripción corta
+Imagen (URL)
+Estado de disponibilidad (true/false)
+
+Requisitos:
+1. Crear componente 
+ProductCard que reciba las propiedades como props
+
+2. Crear componente 
+Catalogo que contenga múltiples ProductCard
+
+3. Mostrar un ícono o badge cuando el producto esté disponible
+
+4. Aplicar estilos básicos (CSS simple)
+
+Estructura sugerida:
+src/
+├── components/
+│   
+├── ProductCard.jsx
+│   
+└── Catalogo.jsx
+├── App.jsx
+└── App.css
