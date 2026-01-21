@@ -11,6 +11,7 @@ import mochilaImage from "../images/mochila-laptop.jpg";
 import cableHdmiImage from "../images/cable-hdmi.jpg";
 import soporteMonitorImage from "../images/soporte-monitor.jpg";
 import lamparaLedImage from "../images/lampara-usb.jpg";
+let catalogoRenderCount = 0;
 const productosData = [
   {
     id: 1,
@@ -93,7 +94,13 @@ const productosData = [
     disponible: true
   }
 ];
+
 function Catalogo() {
+  catalogoRenderCount++;
+  console.log(
+    `%c[Catalogo] Renderizado #${catalogoRenderCount}`,
+    "color: blue; font-weight: bold;"
+  );
 const [busqueda, setBusqueda] = useState("");
 const [soloDisponibles, setSoloDisponibles] = useState(false);
 const [precioMin, setPrecioMin] = useState(0);
@@ -199,28 +206,13 @@ p.precio, 0) / totalProductos;
             </div>
           ) : (
             <div className="no-results-container">
-              {busqueda.length > 0 ? (
-                <>
-                  <h2>No se encontraron resultados</h2>
-                  <p>
-                    No hay productos que coincidan con "
-{busqueda}"
-                    {soloDisponibles && " disponibles"}
-                    {precioMin > 0 || precioMax < 2000 && ` en el 
-rango $${precioMin}-$${precioMax}`}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <h2>No hay productos disponibles</h2>
-                  <p>Intenta ajustar los filtros</p>
-                </>
-              )}
+              <h2>No se encontraron resultados</h2>
+              <p>Intenta ajustar los filtros</p>
             </div>
           )}
-</main>
-</div>
-</div>
-);
+        </main>
+      </div>
+    </div>
+  );
 }
 export default Catalogo;
