@@ -120,3 +120,15 @@ text-align: center;
 color: #999;
 padding: 2rem;
 }
+.debug-info {
+  background: #f0f0f0;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 1rem;
+  text-align: right;
+}
+.render-count {
+  text-align: right;
+}
