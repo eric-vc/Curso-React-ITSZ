@@ -1,36 +1,22 @@
-EJERCICIO 1: Componentes Funcionales y Props
+EJERCICIO 2: Listas Dinámicas y el Atributo key
 
-Objetivo: Crear componentes reutilizables que reciban y muestren datos
-mediante props.
+Objetivo: Implementar rendering eficiente de listas con keys correctas y métodos de array (map, filter, reduce).
 
-Tiempo: 45 minutos
+Tiempo: 50 minutos
 
 Enunciado
-Crea una aplicación React que muestre un catálogo básico de 3 productos.
-Cada producto debe tener:
-Nombre
-Precio
-Descripción corta
-Imagen (URL)
-Estado de disponibilidad (true/false)
-
-Requisitos:
-1. Crear componente 
-ProductCard que reciba las propiedades como props
-
-2. Crear componente 
-Catalogo que contenga múltiples ProductCard
-
-3. Mostrar un ícono o badge cuando el producto esté disponible
-
-4. Aplicar estilos básicos (CSS simple)
-
-Estructura sugerida:
-src/
-├── components/
-│   
-├── ProductCard.jsx
-│   
-└── Catalogo.jsx
-├── App.jsx
-└── App.css
+Extiende la aplicación anterior para:
+1. Agregar cálculos:
+Total de productos
+Cantidad de productos disponibles
+Precio promedio
+Inventario total estimado
+2. Implementar búsqueda:
+Campo de búsqueda que filtre productos por nombre
+Los resultados deben actualizarse en tiempo real
+3. Agregar más productos (mínimo 10 productos en tu dataset)
+Requisitos técnicos:
+Usar filter() para búsqueda
+Usar reduce() para cálculos
+Asegurar que cada elemento de lista tenga un key único
+Mantener el estado de búsqueda en el componente Catalogo
